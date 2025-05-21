@@ -71,7 +71,6 @@ class Game:
         self.spin_start_time = 0
         self.spin_duration = 2000
         self.spin_frames = 0
-        self.max_spin_frames = 15
         self.winning_grid = None
         self.win_patterns = []
         self.animation_alpha = 0
@@ -369,37 +368,62 @@ class Game:
     def check_wins(self):
         patterns = []
 
-        for row in range(self.grid_rows):
-            line = self.grid[row]
-            for col in range(self.grid_cols):
-                if col <= 0 and len(set(line[col : col + 5])) == 1:
-                    patterns.append(("horizontal", row, col, 5))
-                elif col <= 1 and len(set(line[col : col + 4])) == 1:
-                    patterns.append(("horizontal", row, col, 4))
-                elif col <= 2 and len(set(line[col : col + 3])) == 1:
-                    patterns.append(("horizontal", row, col, 3))
+        # Horizontal checks
+        for r_idx in range(self.grid_rows):
+            line = self.grid[r_idx]
+            c_idx = 0
+            while c_idx <= self.grid_cols - 3:  # Minimum pattern length is 3
+                # Check for 5-in-a-row
+                if c_idx <= self.grid_cols - 5 and len(set(line[c_idx : c_idx + 5])) == 1:
+                    patterns.append(("horizontal", r_idx, c_idx, 5))
+                    c_idx += 5  # Advance past this win
+                    continue
+                # Check for 4-in-a-row
+                if c_idx <= self.grid_cols - 4 and len(set(line[c_idx : c_idx + 4])) == 1:
+                    patterns.append(("horizontal", r_idx, c_idx, 4))
+                    c_idx += 4  # Advance past this win
+                    continue
+                # Check for 3-in-a-row
+                if c_idx <= self.grid_cols - 3 and len(set(line[c_idx : c_idx + 3])) == 1:
+                    patterns.append(("horizontal", r_idx, c_idx, 3))
+                    c_idx += 3  # Advance past this win
+                    continue
+                c_idx += 1
 
-        for col in range(self.grid_cols):
-            column = [self.grid[r][col] for r in range(self.grid_rows)]
-            for row in range(self.grid_rows):
-                if row <= 0 and len(set(column[row : row + 5])) == 1:
-                    patterns.append(("vertical", row, col, 5))
-                elif row <= 1 and len(set(column[row : row + 4])) == 1:
-                    patterns.append(("vertical", row, col, 4))
-                elif row <= 2 and len(set(column[row : row + 3])) == 1:
-                    patterns.append(("vertical", row, col, 3))
+        # Vertical checks
+        for c_idx in range(self.grid_cols):
+            column = [self.grid[r_idx][c_idx] for r_idx in range(self.grid_rows)]
+            r_idx = 0
+            while r_idx <= self.grid_rows - 3:  # Minimum pattern length is 3
+                # Check for 5-in-a-row
+                if r_idx <= self.grid_rows - 5 and len(set(column[r_idx : r_idx + 5])) == 1:
+                    patterns.append(("vertical", r_idx, c_idx, 5))
+                    r_idx += 5  # Advance past this win
+                    continue
+                # Check for 4-in-a-row
+                if r_idx <= self.grid_rows - 4 and len(set(column[r_idx : r_idx + 4])) == 1:
+                    patterns.append(("vertical", r_idx, c_idx, 4))
+                    r_idx += 4  # Advance past this win
+                    continue
+                # Check for 3-in-a-row
+                if r_idx <= self.grid_rows - 3 and len(set(column[r_idx : r_idx + 3])) == 1:
+                    patterns.append(("vertical", r_idx, c_idx, 3))
+                    r_idx += 3  # Advance past this win
+                    continue
+                r_idx += 1
 
-        for row in range(self.grid_rows - 1):
-            for col in range(self.grid_cols - 1):
-                block = [
-                    self.grid[row][col],
-                    self.grid[row][col + 1],
-                    self.grid[row + 1][col],
-                    self.grid[row + 1][col + 1],
+        # 2x2 Block checks
+        for r_block in range(self.grid_rows - 1):
+            for c_block in range(self.grid_cols - 1):
+                block_symbols = [
+                    self.grid[r_block][c_block],
+                    self.grid[r_block][c_block + 1],
+                    self.grid[r_block + 1][c_block],
+                    self.grid[r_block + 1][c_block + 1],
                 ]
-                if len(set(block)) == 1:
-                    patterns.append(("block", row, col, 2))
-
+                if len(set(block_symbols)) == 1:
+                    patterns.append(("block", r_block, c_block, 2))
+        
         return patterns
 
     def calculate_payout(self):
