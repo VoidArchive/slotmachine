@@ -2,6 +2,8 @@
 
 This is a simple graphical slot machine game built using Python and Pygame.
 
+![Gameplay Screenshot](./assets/gameplay.png)
+
 ## Features
 
 * Classic 5x5 grid slot machine.
