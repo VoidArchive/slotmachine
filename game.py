@@ -215,7 +215,9 @@ class Game:
                             win_color = (255, 215, 0, self.animation_alpha)
 
                 if cell_in_win:
-                    s = pygame.Surface((self.cell_size, self.cell_size), pygame.SRCALPHA)
+                    s = pygame.Surface(
+                        (self.cell_size, self.cell_size), pygame.SRCALPHA
+                    )
                     s.fill(win_color)
                     self.screen.blit(s, rect)
 
@@ -374,17 +376,26 @@ class Game:
             c_idx = 0
             while c_idx <= self.grid_cols - 3:  # Minimum pattern length is 3
                 # Check for 5-in-a-row
-                if c_idx <= self.grid_cols - 5 and len(set(line[c_idx : c_idx + 5])) == 1:
+                if (
+                    c_idx <= self.grid_cols - 5
+                    and len(set(line[c_idx : c_idx + 5])) == 1
+                ):
                     patterns.append(("horizontal", r_idx, c_idx, 5))
                     c_idx += 5  # Advance past this win
                     continue
                 # Check for 4-in-a-row
-                if c_idx <= self.grid_cols - 4 and len(set(line[c_idx : c_idx + 4])) == 1:
+                if (
+                    c_idx <= self.grid_cols - 4
+                    and len(set(line[c_idx : c_idx + 4])) == 1
+                ):
                     patterns.append(("horizontal", r_idx, c_idx, 4))
                     c_idx += 4  # Advance past this win
                     continue
                 # Check for 3-in-a-row
-                if c_idx <= self.grid_cols - 3 and len(set(line[c_idx : c_idx + 3])) == 1:
+                if (
+                    c_idx <= self.grid_cols - 3
+                    and len(set(line[c_idx : c_idx + 3])) == 1
+                ):
                     patterns.append(("horizontal", r_idx, c_idx, 3))
                     c_idx += 3  # Advance past this win
                     continue
@@ -396,17 +407,26 @@ class Game:
             r_idx = 0
             while r_idx <= self.grid_rows - 3:  # Minimum pattern length is 3
                 # Check for 5-in-a-row
-                if r_idx <= self.grid_rows - 5 and len(set(column[r_idx : r_idx + 5])) == 1:
+                if (
+                    r_idx <= self.grid_rows - 5
+                    and len(set(column[r_idx : r_idx + 5])) == 1
+                ):
                     patterns.append(("vertical", r_idx, c_idx, 5))
                     r_idx += 5  # Advance past this win
                     continue
                 # Check for 4-in-a-row
-                if r_idx <= self.grid_rows - 4 and len(set(column[r_idx : r_idx + 4])) == 1:
+                if (
+                    r_idx <= self.grid_rows - 4
+                    and len(set(column[r_idx : r_idx + 4])) == 1
+                ):
                     patterns.append(("vertical", r_idx, c_idx, 4))
                     r_idx += 4  # Advance past this win
                     continue
                 # Check for 3-in-a-row
-                if r_idx <= self.grid_rows - 3 and len(set(column[r_idx : r_idx + 3])) == 1:
+                if (
+                    r_idx <= self.grid_rows - 3
+                    and len(set(column[r_idx : r_idx + 3])) == 1
+                ):
                     patterns.append(("vertical", r_idx, c_idx, 3))
                     r_idx += 3  # Advance past this win
                     continue
@@ -423,7 +443,7 @@ class Game:
                 ]
                 if len(set(block_symbols)) == 1:
                     patterns.append(("block", r_block, c_block, 2))
-        
+
         return patterns
 
     def calculate_payout(self):
@@ -449,4 +469,3 @@ class Game:
             total_payout += base_value * multiplier
 
         return total_payout
-
